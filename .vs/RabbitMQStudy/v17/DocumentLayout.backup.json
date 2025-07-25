@@ -1,7 +1,44 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4F71528C-9D6D-4705-B0CE-1943DF522C44}|src\\RabbitMQStudy.API\\RabbitMQStudy.API.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\src\\rabbitmqstudy.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F71528C-9D6D-4705-B0CE-1943DF522C44}|src\\RabbitMQStudy.API\\RabbitMQStudy.API.csproj|solutionrelative:src\\rabbitmqstudy.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE67B821-E9C0-4A99-B537-4B1E854F52FB}|shared\\RabbitMQStudy.Application\\RabbitMQStudy.Application.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\shared\\rabbitmqstudy.application\\handlers\\createorderhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE67B821-E9C0-4A99-B537-4B1E854F52FB}|shared\\RabbitMQStudy.Application\\RabbitMQStudy.Application.csproj|solutionrelative:shared\\rabbitmqstudy.application\\handlers\\createorderhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C70ECEF0-F171-4B2A-90AF-E8FD58C66B9E}|shared\\RabbitMQStudy.Domain\\RabbitMQStudy.Domain.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\shared\\rabbitmqstudy.domain\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C70ECEF0-F171-4B2A-90AF-E8FD58C66B9E}|shared\\RabbitMQStudy.Domain\\RabbitMQStudy.Domain.csproj|solutionrelative:shared\\rabbitmqstudy.domain\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C70ECEF0-F171-4B2A-90AF-E8FD58C66B9E}|shared\\RabbitMQStudy.Domain\\RabbitMQStudy.Domain.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\shared\\rabbitmqstudy.domain\\events\\ordercreatedevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C70ECEF0-F171-4B2A-90AF-E8FD58C66B9E}|shared\\RabbitMQStudy.Domain\\RabbitMQStudy.Domain.csproj|solutionrelative:shared\\rabbitmqstudy.domain\\events\\ordercreatedevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE67B821-E9C0-4A99-B537-4B1E854F52FB}|shared\\RabbitMQStudy.Application\\RabbitMQStudy.Application.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\shared\\rabbitmqstudy.application\\commands\\createordercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE67B821-E9C0-4A99-B537-4B1E854F52FB}|shared\\RabbitMQStudy.Application\\RabbitMQStudy.Application.csproj|solutionrelative:shared\\rabbitmqstudy.application\\commands\\createordercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BA464D7-EB4D-423C-A680-EADA63753257}|src\\RabbitMQStudy.InventoryService\\RabbitMQStudy.InventoryService.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\src\\rabbitmqstudy.inventoryservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BA464D7-EB4D-423C-A680-EADA63753257}|src\\RabbitMQStudy.InventoryService\\RabbitMQStudy.InventoryService.csproj|solutionrelative:src\\rabbitmqstudy.inventoryservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BA464D7-EB4D-423C-A680-EADA63753257}|src\\RabbitMQStudy.InventoryService\\RabbitMQStudy.InventoryService.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\src\\rabbitmqstudy.inventoryservice\\orderconsumerretrypolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BA464D7-EB4D-423C-A680-EADA63753257}|src\\RabbitMQStudy.InventoryService\\RabbitMQStudy.InventoryService.csproj|solutionrelative:src\\rabbitmqstudy.inventoryservice\\orderconsumerretrypolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE3D537C-DAA9-4365-B147-33696EBD7025}|src\\RabbitMQStudy.EmailService\\RabbitMQStudy.EmailService.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\src\\rabbitmqstudy.emailservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE3D537C-DAA9-4365-B147-33696EBD7025}|src\\RabbitMQStudy.EmailService\\RabbitMQStudy.EmailService.csproj|solutionrelative:src\\rabbitmqstudy.emailservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AE3D537C-DAA9-4365-B147-33696EBD7025}|src\\RabbitMQStudy.EmailService\\RabbitMQStudy.EmailService.csproj|c:\\users\\felip\\source\\repos\\rabbitmqstudy\\src\\rabbitmqstudy.emailservice\\orderconsumerretrypolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE3D537C-DAA9-4365-B147-33696EBD7025}|src\\RabbitMQStudy.EmailService\\RabbitMQStudy.EmailService.csproj|solutionrelative:src\\rabbitmqstudy.emailservice\\orderconsumerretrypolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +46,128 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 9,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Order.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Domain\\Entities\\Order.cs",
+              "RelativeDocumentMoniker": "shared\\RabbitMQStudy.Domain\\Entities\\Order.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Domain\\Entities\\Order.cs",
+              "RelativeToolTip": "shared\\RabbitMQStudy.Domain\\Entities\\Order.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:53:41.807Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CreateOrderCommand.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Application\\Commands\\CreateOrderCommand.cs",
+              "RelativeDocumentMoniker": "shared\\RabbitMQStudy.Application\\Commands\\CreateOrderCommand.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Application\\Commands\\CreateOrderCommand.cs",
+              "RelativeToolTip": "shared\\RabbitMQStudy.Application\\Commands\\CreateOrderCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:52:51.64Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateOrderHandler.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Application\\Handlers\\CreateOrderHandler.cs",
+              "RelativeDocumentMoniker": "shared\\RabbitMQStudy.Application\\Handlers\\CreateOrderHandler.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Application\\Handlers\\CreateOrderHandler.cs",
+              "RelativeToolTip": "shared\\RabbitMQStudy.Application\\Handlers\\CreateOrderHandler.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAYwDIAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:50:02.219Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "OrderCreatedEvent.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Domain\\Events\\OrderCreatedEvent.cs",
+              "RelativeDocumentMoniker": "shared\\RabbitMQStudy.Domain\\Events\\OrderCreatedEvent.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\shared\\RabbitMQStudy.Domain\\Events\\OrderCreatedEvent.cs",
+              "RelativeToolTip": "shared\\RabbitMQStudy.Domain\\Events\\OrderCreatedEvent.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:49:02.394Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "OrderConsumerRetryPolicy.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.InventoryService\\OrderConsumerRetryPolicy.cs",
+              "RelativeDocumentMoniker": "src\\RabbitMQStudy.InventoryService\\OrderConsumerRetryPolicy.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.InventoryService\\OrderConsumerRetryPolicy.cs",
+              "RelativeToolTip": "src\\RabbitMQStudy.InventoryService\\OrderConsumerRetryPolicy.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:48:33.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.InventoryService\\Program.cs",
+              "RelativeDocumentMoniker": "src\\RabbitMQStudy.InventoryService\\Program.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.InventoryService\\Program.cs",
+              "RelativeToolTip": "src\\RabbitMQStudy.InventoryService\\Program.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACcAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:47:46.273Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "OrderConsumerRetryPolicy.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.EmailService\\OrderConsumerRetryPolicy.cs",
+              "RelativeDocumentMoniker": "src\\RabbitMQStudy.EmailService\\OrderConsumerRetryPolicy.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.EmailService\\OrderConsumerRetryPolicy.cs",
+              "RelativeToolTip": "src\\RabbitMQStudy.EmailService\\OrderConsumerRetryPolicy.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:46:38.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.EmailService\\Program.cs",
+              "RelativeDocumentMoniker": "src\\RabbitMQStudy.EmailService\\Program.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.EmailService\\Program.cs",
+              "RelativeToolTip": "src\\RabbitMQStudy.EmailService\\Program.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAIwCcAAACKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:45:44.037Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.API\\Program.cs",
+              "RelativeDocumentMoniker": "src\\RabbitMQStudy.API\\Program.cs",
+              "ToolTip": "C:\\Users\\felip\\source\\repos\\RabbitMQStudy\\src\\RabbitMQStudy.API\\Program.cs",
+              "RelativeToolTip": "src\\RabbitMQStudy.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T02:14:38.338Z",
+              "EditorCaption": ""
             }
           ]
         }
