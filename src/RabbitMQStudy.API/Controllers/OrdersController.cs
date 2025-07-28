@@ -37,12 +37,6 @@ namespace RabbitMQStudy.API.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetOrders()
-        {
-            return Ok(new { Message = "API de pedidos está funcionando!" });
-        }
-
         [HttpGet("health")]
         public IActionResult GetHealth()
         {
