@@ -57,10 +57,10 @@ consumer.ReceivedAsync += async (model, ea) =>
         Console.WriteLine($"🔄 Tentativa - Enviando email para pedido: {orderEvent.OrderId}");
 
         // Forçar falha para teste
-        if (orderEvent.CustomerName.Contains("Cliente 1"))
-        {
-            throw new Exception("Falha forçada para teste de DLQ");
-        }
+        //if (orderEvent.CustomerName.Contains("Cliente 1"))
+        //{
+        //    throw new Exception("Falha forçada para teste de DLQ");
+        //}
 
         await SendEmailAsync(orderEvent);
 

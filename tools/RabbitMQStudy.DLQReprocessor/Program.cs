@@ -44,9 +44,7 @@ if (isDocker)
 {
     Console.WriteLine("\n🔄 Executando em modo automático (Docker)");
 
-    // Verificar se há mensagens em alguma fila  
-    bool hasMessages = false;
-    string queueWithMessages = "";
+    var queuesWithMessages = new List<string>();
 
     foreach (var queueName in dlqQueues)
     {
@@ -55,21 +53,25 @@ if (isDocker)
             var queueInfo = await channel.QueueDeclarePassiveAsync(queueName);
             if (queueInfo.MessageCount > 0)
             {
-                hasMessages = true;
-                queueWithMessages = queueName;
+                queuesWithMessages.Add(queueName);
                 Console.WriteLine($"🔍 Encontradas {queueInfo.MessageCount} mensagens em {queueName}");
             }
         }
         catch
         {
-            // Ignorar erros  
+
         }
     }
 
-    if (hasMessages)
+    if (queuesWithMessages.Any())
     {
-        Console.WriteLine($"♻️ Reprocessando mensagens de {queueWithMessages}...");
-        await ReprocessAllAsync(channel, queueWithMessages);
+        foreach (var queueName in queuesWithMessages)
+        {
+            Console.WriteLine($"♻️ Reprocessando mensagens de {queueName}...");
+            await ReprocessAllAsync(channel, queueName);
+        }
+
+        Console.WriteLine("🎉 Reprocessamento completo!");
     }
     else
     {
@@ -240,19 +242,16 @@ static async Task ReprocessSpecificAsync(IChannel channel, string queueName, str
         }
         catch (OperationCanceledException)
         {
-            // Normal quando encontramos a mensagem e cancelamos o token
         }
     }
     finally
     {
-        // Cancelar o consumer
         try
         {
             await channel.BasicCancelAsync(consumerTag);
         }
         catch
         {
-            // Ignorar erros ao cancelar
         }
     }
 
