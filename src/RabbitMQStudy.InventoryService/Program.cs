@@ -49,25 +49,17 @@ var retryPolicy = new OrderConsumerRetryPolicy(channel, "inventory-service");
 var consumer = new AsyncEventingBasicConsumer(channel);
 consumer.ReceivedAsync += async (model, ea) =>
 {
-    var retryCount = OrderConsumerRetryPolicy.GetRetryCount(ea.BasicProperties);
-
     try
     {
         var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
-        var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message);
+        var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message) ?? throw new Exception("Falha ao deserializar a mensagem");
+        Console.WriteLine($"🔄 Tentativa - Atualizando estoque para pedido: {orderEvent.OrderId}");
 
-        if (orderEvent == null)
+        // Forçar falha para teste
+        if (orderEvent.CustomerName.Contains("Cliente Falha"))
         {
-            throw new Exception("Falha ao deserializar a mensagem");
-        }
-
-        Console.WriteLine($"🔄 Tentativa {retryCount + 1} - Atualizando estoque para pedido: {orderEvent.OrderId}");
-
-        // Simular falha ocasional para testar retry
-        if (Random.Shared.Next(1, 6) == 1) // ~17% chance de falha
-        {
-            throw new Exception("Falha simulada na atualização de estoque");
+            throw new Exception("Falha forçada para teste de DLQ");
         }
 
         await UpdateInventoryAsync(orderEvent);
@@ -78,7 +70,14 @@ consumer.ReceivedAsync += async (model, ea) =>
     catch (Exception ex)
     {
         Console.WriteLine($"❌ Erro ao atualizar estoque: {ex.Message}");
-        await retryPolicy.HandleFailureAsync(ea, retryCount, ex);
+
+        // Extrair o OrderId da mensagem para usar como chave
+        var body = ea.Body.ToArray();
+        var message = Encoding.UTF8.GetString(body);
+        var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message);
+        var messageId = orderEvent?.OrderId.ToString() ?? Guid.NewGuid().ToString();
+
+        await retryPolicy.HandleFailureAsync(ea, messageId, ex);
     }
 };
 

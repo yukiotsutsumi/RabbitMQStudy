@@ -89,21 +89,35 @@ RabbitMQStudy/
 
 ### Criar Pedido
 ```http
-POST /api/orders
+POST /api/orders/batch
 Content-Type: application/json
 
-{
-  "customerName": "John Doe",
-  "customerEmail": "John@email.com",
-  "items": [
-    {
-      "productId": "550e8400-e29b-41d4-a716-446655440000",
-      "productName": "Produto A",
-      "quantity": 2,
-      "unitPrice": 29.99
-    }
-  ]
-}
+[
+   {
+   "customerName": "John Doe",
+   "customerEmail": "John@email.com",
+   "items": [
+      {
+         "productId": "550e8400-e29b-41d4-a716-446655440000",
+         "productName": "Produto A",
+         "quantity": 2,
+         "unitPrice": 29.99
+      }
+   ]
+   },
+   {
+   "customerName": "John 2",
+   "customerEmail": "John2@email.com",
+   "items": [
+      {
+         "productId": "550e8400-e29b-41d4-a716-446655440001",
+         "productName": "Produto B",
+         "quantity": 1,
+         "unitPrice": 19.99
+      }
+   ]
+   }
+]
 ```
 
 ### Health Check
@@ -113,7 +127,7 @@ GET /health
 
 ## 🔄 Fluxo de Mensagens
 
-1. **Cliente** envia requisição POST para `/api/orders`
+1. **Cliente** envia requisição POST para `/api/orders\batch`
 2. **API** cria o pedido e publica evento `order.created` no RabbitMQ
 3. **Email Service** consome a mensagem e processa envio de email
 4. **Inventory Service** consome a mensagem e atualiza o estoque

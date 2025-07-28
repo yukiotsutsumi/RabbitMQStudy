@@ -49,25 +49,17 @@ var retryPolicy = new OrderConsumerRetryPolicy(channel, "email-service");
 var consumer = new AsyncEventingBasicConsumer(channel);
 consumer.ReceivedAsync += async (model, ea) =>
 {
-    var retryCount = OrderConsumerRetryPolicy.GetRetryCount(ea.BasicProperties);
-
     try
     {
         var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
-        var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message);
+        var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message) ?? throw new Exception("Falha ao deserializar a mensagem");
+        Console.WriteLine($"🔄 Tentativa - Enviando email para pedido: {orderEvent.OrderId}");
 
-        if (orderEvent == null)
+        // Forçar falha para teste
+        if (orderEvent.CustomerName.Contains("Cliente 1"))
         {
-            throw new Exception("Falha ao deserializar a mensagem");
-        }
-
-        Console.WriteLine($"🔄 Tentativa {retryCount + 1} - Enviando email para pedido: {orderEvent.OrderId}");
-
-        // Simular falha ocasional para testar retry
-        if (Random.Shared.Next(1, 5) == 1) // 20% chance de falha
-        {
-            throw new Exception("Falha simulada no envio de email");
+            throw new Exception("Falha forçada para teste de DLQ");
         }
 
         await SendEmailAsync(orderEvent);
@@ -78,7 +70,14 @@ consumer.ReceivedAsync += async (model, ea) =>
     catch (Exception ex)
     {
         Console.WriteLine($"❌ Erro ao enviar email: {ex.Message}");
-        await retryPolicy.HandleFailureAsync(ea, retryCount, ex);
+
+        // Extrair o OrderId da mensagem para usar como chave
+        var body = ea.Body.ToArray();
+        var message = Encoding.UTF8.GetString(body);
+        var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message);
+        var messageId = orderEvent?.OrderId.ToString() ?? Guid.NewGuid().ToString();
+
+        await retryPolicy.HandleFailureAsync(ea, messageId, ex);
     }
 };
 

@@ -1,93 +1,66 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text;
 
-namespace RabbitMQStudy.Infrastructure.Messaging;
-
-public class OrderConsumerRetryPolicy(IChannel channel, string queueName, int maxRetries = 3)
+namespace RabbitMQStudy.Infrastructure.Messaging
 {
-    private readonly IChannel _channel = channel;
-
-    public static int GetRetryCount(IReadOnlyBasicProperties properties)
+    public class OrderConsumerRetryPolicy(IChannel channel, string queueName, int maxRetries = 3)
     {
-        if (properties.Headers != null &&
-            properties.Headers.TryGetValue("x-retry-count", out var retryCountObj) &&
-            retryCountObj != null)
-        {
-            return Convert.ToInt32(retryCountObj);
-        }
+        private static readonly Dictionary<string, int> _retryCounters = [];
 
-        return 0;
-    }
-
-    public async Task HandleFailureAsync(BasicDeliverEventArgs ea, int currentRetryCount, Exception exception)
-    {
-        if (currentRetryCount < maxRetries)
+        public async Task HandleFailureAsync(BasicDeliverEventArgs ea, string messageId, Exception exception)
         {
-            // Incrementar contador de retry
-            var nextRetryCount = currentRetryCount + 1;
+            // Usar o messageId para rastrear tentativas
+            var key = $"{queueName}:{messageId}";
+
+            if (!_retryCounters.ContainsKey(key))
+            {
+                _retryCounters[key] = 0;
+            }
+
+            _retryCounters[key]++;
+            var currentRetryCount = _retryCounters[key];
+
+            Console.WriteLine($"Debug: messageId={messageId}, tentativa={currentRetryCount}, max={maxRetries}");
+
+            if (currentRetryCount >= maxRetries)
+            {
+                Console.WriteLine($"❌ Número máximo de retentativas atingido ({maxRetries}). Enviando para DLQ: {queueName}.dead");
+
+                // Remover do contador (limpeza)
+                _retryCounters.Remove(key);
+
+                // Rejeitar sem requeue - vai para DLQ
+                await channel.BasicNackAsync(ea.DeliveryTag, false, false);
+
+                Console.WriteLine($"✅ Mensagem enviada para DLQ: {queueName}.dead");
+                return;
+            }
+
+            Console.WriteLine($"🔄 Falha na tentativa {currentRetryCount}. Agendando retry #{currentRetryCount + 1}...");
 
             // Calcular delay com backoff exponencial
-            var delayMs = (int)Math.Pow(2, nextRetryCount) * 1000; // 2s, 4s, 8s...
+            var delayMs = CalculateBackoffDelay(currentRetryCount);
+            Console.WriteLine($"⏱️ Agendando retry em {delayMs}ms");
 
-            // Adicionar jitter (variação aleatória) para evitar thundering herd
-            delayMs += Random.Shared.Next(100, 1000);
+            // Aguardar o delay
+            await Task.Delay(delayMs);
 
-            Console.WriteLine($"⏱️ Agendando retry #{nextRetryCount} em {delayMs}ms");
+            // Rejeitar e recolocar na fila (requeue=true)
+            await channel.BasicNackAsync(ea.DeliveryTag, false, true);
 
-            // Criar fila de delay temporária
-            var delayQueueName = $"{queueName}.delay.{Guid.NewGuid()}";
-
-            await _channel.QueueDeclareAsync(
-                delayQueueName,
-                durable: true,
-                exclusive: false,
-                autoDelete: true,
-                arguments: new Dictionary<string, object?>
-                {
-                    { "x-dead-letter-exchange", "orders" },
-                    { "x-dead-letter-routing-key", "order.created" },
-                    { "x-message-ttl", delayMs }
-                });
-
-            // Criar propriedades com contador de retry
-            var properties = new BasicProperties
-            {
-                Headers = new Dictionary<string, object?>
-                {
-                    { "x-retry-count", nextRetryCount },
-                    { "x-exception", exception.Message },
-                    { "x-failed-at", DateTimeOffset.UtcNow.ToUnixTimeSeconds() }
-                }
-            };
-
-            // Publicar na fila de delay
-            await _channel.BasicPublishAsync("", delayQueueName, false, properties, ea.Body);
-
-            // Acknowledge a mensagem original
-            await _channel.BasicAckAsync(ea.DeliveryTag, false);
+            Console.WriteLine($"✅ Retry agendado para mensagem");
         }
-        else
+
+        private static int CalculateBackoffDelay(int retryCount)
         {
-            Console.WriteLine($"❌ Número máximo de retentativas atingido. Enviando para DLQ.");
+            var baseDelay = 1000;
+            var maxDelay = 30000;
 
-            // Criar propriedades para DLQ
-            var properties = new BasicProperties
-            {
-                Headers = new Dictionary<string, object?>
-                {
-                    { "x-exception", exception.Message },
-                    { "x-failed-at", DateTimeOffset.UtcNow.ToUnixTimeSeconds() },
-                    { "x-retry-count", currentRetryCount },
-                    { "x-original-exchange", "orders" },
-                    { "x-original-routing-key", "order.created" }
-                }
-            };
+            var delay = Math.Min(maxDelay, baseDelay * Math.Pow(2, retryCount - 1));
+            var jitter = Random.Shared.Next(0, 500);
 
-            // Publicar na DLQ
-            await _channel.BasicPublishAsync("orders.dlx", queueName, false, properties, ea.Body);
-
-            // Acknowledge a mensagem original
-            await _channel.BasicAckAsync(ea.DeliveryTag, false);
+            return (int)delay + jitter;
         }
     }
 }
