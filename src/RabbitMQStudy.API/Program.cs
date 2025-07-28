@@ -1,8 +1,33 @@
 using Microsoft.OpenApi.Models;
 using RabbitMQStudy.Application.Commands;
 using RabbitMQStudy.Infrastructure.Config;
+using RabbitMQStudy.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// No início do Program.cs, após definir o builder
+var logger = LoggerFactory.Create(config =>
+{
+    config.AddConsole();
+    config.AddDebug();
+    config.SetMinimumLevel(LogLevel.Debug);
+}).CreateLogger("Program");
+
+logger.LogInformation("Iniciando aplicação...");
+logger.LogInformation("Configurando serviços...");
+
+// Após configurar o RabbitMQ
+logger.LogInformation("Configuração do RabbitMQ: {Host}:{Port}",
+    builder.Configuration["RabbitMQ:Host"],
+    builder.Configuration["RabbitMQ:Port"]);
+
+// Antes de construir a aplicação
+logger.LogInformation("Construindo aplicação...");
+
+// Após construir a aplicação
+logger.LogInformation("Aplicação construída com sucesso");
+
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
 // Adicionar serviços ao container
 builder.Services.AddControllers();
@@ -42,7 +67,7 @@ app.UseExceptionHandler(appError =>
 
         await context.Response.WriteAsJsonAsync(new
         {
-            StatusCode = context.Response.StatusCode,
+            context.Response.StatusCode,
             Message = "Erro interno no servidor"
         });
     });
@@ -51,9 +76,6 @@ app.UseExceptionHandler(appError =>
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
-
-// Rota de diagnóstico simples
-app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }));
 
 // Iniciar a aplicação
 app.Run();

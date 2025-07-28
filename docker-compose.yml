@@ -24,7 +24,7 @@ services:
       dockerfile: src/RabbitMQStudy.API/Dockerfile
     container_name: rabbitmq-api
     ports:
-      - "8080:80"
+      - "5278:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RabbitMQ__Host=rabbitmq
@@ -51,6 +51,46 @@ services:
       context: .
       dockerfile: src/RabbitMQStudy.InventoryService/Dockerfile
     container_name: rabbitmq-inventory-service
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - RabbitMQ__Host=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+
+  # Ferramentas de monitoramento e manutenção
+  dlq-monitor:
+    build:
+      context: .
+      dockerfile: tools/RabbitMQStudy.DLQMonitor/Dockerfile
+    container_name: rabbitmq-dlq-monitor
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - RabbitMQ__Host=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+
+  dlq-reprocessor:
+    build:
+      context: .
+      dockerfile: tools/RabbitMQStudy.DLQReprocessor/Dockerfile
+    container_name: rabbitmq-dlq-reprocessor
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - RabbitMQ__Host=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+
+  health-checker:
+    build:
+      context: .
+      dockerfile: tools/RabbitMQStudy.HealthChecker/Dockerfile
+    container_name: rabbitmq-health-checker
     environment:
       - DOTNET_ENVIRONMENT=Development
       - RabbitMQ__Host=rabbitmq

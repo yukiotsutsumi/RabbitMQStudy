@@ -1,8 +1,18 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
 
 Console.WriteLine("🏥 Health Checker iniciado");
 
-var factory = new ConnectionFactory() { HostName = "localhost" };
+// Carregar configuração
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+var rabbitMQHost = configuration["RabbitMQ:Host"] ?? "localhost";
+Console.WriteLine($"Conectando ao RabbitMQ em: {rabbitMQHost}");
+
+var factory = new ConnectionFactory() { HostName = rabbitMQHost };
 
 while (true)
 {
@@ -31,4 +41,5 @@ while (true)
         Console.WriteLine($"❌ Erro de conectividade: {ex.Message}");
     }
 
-    await Task.Delay(30000);}
+    await Task.Delay(30000);
+}

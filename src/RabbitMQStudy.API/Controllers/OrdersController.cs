@@ -23,8 +23,17 @@ namespace RabbitMQStudy.API.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Erro ao criar pedido");
-                return StatusCode(500, new { Error = "Erro interno ao processar o pedido", ex.Message });
+                logger.LogError(ex, "Erro ao criar pedido: {Message}, StackTrace: {StackTrace}",
+                    ex.Message, ex.StackTrace);
+
+                var innerExMessage = ex.InnerException?.Message ?? "Sem exceção interna";
+
+                return StatusCode(500, new
+                {
+                    Error = "Erro interno ao processar o pedido",
+                    ex.Message,
+                    InnerExceptionMessage = innerExMessage
+                });
             }
         }
 
@@ -32,6 +41,12 @@ namespace RabbitMQStudy.API.Controllers
         public IActionResult GetOrders()
         {
             return Ok(new { Message = "API de pedidos está funcionando!" });
+        }
+
+        [HttpGet("health")]
+        public IActionResult GetHealth()
+        {
+            return Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow });
         }
     }
 }
