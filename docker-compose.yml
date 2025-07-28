@@ -65,25 +65,25 @@ services:
       context: .
       dockerfile: tools/RabbitMQStudy.DLQMonitor/Dockerfile
     container_name: rabbitmq-dlq-monitor
-    environment:
-      - DOTNET_ENVIRONMENT=Development
-      - RabbitMQ__Host=rabbitmq
     depends_on:
       rabbitmq:
         condition: service_healthy
-    restart: on-failure
+    environment:
+      - RabbitMQ__Host=rabbitmq
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    restart: unless-stopped
 
   dlq-reprocessor:
     build:
       context: .
       dockerfile: tools/RabbitMQStudy.DLQReprocessor/Dockerfile
     container_name: rabbitmq-dlq-reprocessor
-    environment:
-      - DOTNET_ENVIRONMENT=Development
-      - RabbitMQ__Host=rabbitmq
     depends_on:
       rabbitmq:
         condition: service_healthy
+    environment:
+      - RabbitMQ__Host=rabbitmq
+      - DOTNET_RUNNING_IN_CONTAINER=true
     restart: on-failure
 
   health-checker:

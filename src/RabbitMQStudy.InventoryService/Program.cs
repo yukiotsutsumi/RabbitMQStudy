@@ -13,15 +13,34 @@ var factory = new ConnectionFactory() { HostName = rabbitMqHost };
 using var connection = await factory.CreateConnectionAsync();
 using var channel = await connection.CreateChannelAsync();
 
-// Declarar exchange e filas
+// Declarar exchange e DLX
 await channel.ExchangeDeclareAsync("orders", ExchangeType.Topic, true);
-await channel.QueueDeclareAsync("inventory-service", true, false, false);
+await channel.ExchangeDeclareAsync("orders.dlx", ExchangeType.Direct, true);
+
+// Declarar a fila principal com configuração de DLQ
+await channel.QueueDeclareAsync(
+    queue: "inventory-service",
+    durable: true,
+    exclusive: false,
+    autoDelete: false,
+    arguments: new Dictionary<string, object?>
+    {
+        { "x-dead-letter-exchange", "orders.dlx" },
+        { "x-dead-letter-routing-key", "inventory-service.dead" }
+    });
+
+// Bind da fila principal
 await channel.QueueBindAsync("inventory-service", "orders", "order.created");
 
-// Configurar DLX e DLQ
-await channel.ExchangeDeclareAsync("orders.dlx", ExchangeType.Direct, true);
-await channel.QueueDeclareAsync("inventory-service.dead", true, false, false);
-await channel.QueueBindAsync("inventory-service.dead", "orders.dlx", "inventory-service");
+// Declarar a DLQ
+await channel.QueueDeclareAsync(
+    queue: "inventory-service.dead",
+    durable: true,
+    exclusive: false,
+    autoDelete: false);
+
+// Bind da DLQ
+await channel.QueueBindAsync("inventory-service.dead", "orders.dlx", "inventory-service.dead");
 
 // Configurar retry
 var retryPolicy = new OrderConsumerRetryPolicy(channel, "inventory-service");
@@ -63,12 +82,28 @@ consumer.ReceivedAsync += async (model, ea) =>
     }
 };
 
+// Configurar prefetch count
+await channel.BasicQosAsync(0, 1, false);
+
 await channel.BasicConsumeAsync("inventory-service", false, consumer);
 
 Console.WriteLine("Serviço em execução. Aguardando mensagens...");
 
 // Manter o aplicativo em execução
-await Task.Delay(Timeout.Infinite);
+var cts = new CancellationTokenSource();
+Console.CancelKeyPress += (_, e) => {
+    e.Cancel = true;
+    cts.Cancel();
+};
+
+try
+{
+    await Task.Delay(-1, cts.Token);
+}
+catch (OperationCanceledException)
+{
+    Console.WriteLine("Serviço finalizado.");
+}
 
 // Método para simular atualização de estoque
 static async Task UpdateInventoryAsync(OrderCreatedEvent order)

@@ -12,23 +12,41 @@ namespace RabbitMQStudy.Infrastructure.Messaging
             // Dead Letter Exchange
             await channel.ExchangeDeclareAsync("orders.dlx", ExchangeType.Direct, durable: true);
 
+            // Configurar filas de serviços
+            await ConfigureServiceQueueAsync(channel, "order-processor");
+            await ConfigureServiceQueueAsync(channel, "email-service");
+            await ConfigureServiceQueueAsync(channel, "inventory-service");
+        }
+
+        private static async Task ConfigureServiceQueueAsync(IChannel channel, string serviceName)
+        {
+            // Fila principal com configuração de DLQ
             var queueArgs = new Dictionary<string, object?>
             {
                 {"x-dead-letter-exchange", "orders.dlx"},
-                {"x-dead-letter-routing-key", "failed"},
-                {"x-message-ttl", 300000},
-                {"x-max-retries", 3}
+                {"x-dead-letter-routing-key", $"{serviceName}.dead"}
             };
 
-            await channel.QueueDeclareAsync("order-processor", durable: true, exclusive: false, autoDelete: false, arguments: queueArgs);
-            await channel.QueueBindAsync("order-processor", "orders", "order.created");
+            // Declarar fila principal
+            await channel.QueueDeclareAsync(
+                queue: serviceName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: queueArgs);
 
-            // Dead Letter Queue
-            await channel.QueueDeclareAsync("order-processor.dead", durable: true, exclusive: false, autoDelete: false);
-            await channel.QueueBindAsync("order-processor.dead", "orders.dlx", "failed");
+            // Bind da fila principal à exchange
+            await channel.QueueBindAsync(serviceName, "orders", "order.created");
 
-            // Retry Queue (para reprocessamento manual)
-            await channel.QueueDeclareAsync("order-processor.retry", durable: true, exclusive: false, autoDelete: false);
+            // Declarar fila DLQ
+            await channel.QueueDeclareAsync(
+                queue: $"{serviceName}.dead",
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+
+            // Bind da fila DLQ à exchange DLX
+            await channel.QueueBindAsync($"{serviceName}.dead", "orders.dlx", $"{serviceName}.dead");
         }
     }
 }
